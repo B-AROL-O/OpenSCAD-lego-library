@@ -56,15 +56,15 @@ module hole( in_height = cn_lego_height_beam, in_precision = 0.5 )
 		//Top
 		[0,in_height],
 		//Top Big hole
-		[cn_lego_drill_large/2,in_height],
-		[cn_lego_drill_large/2,in_height-cn_lego_drill_depth_indent],
+		[cn_lego_drill_large,in_height],
+		[cn_lego_drill_large,in_height-cn_lego_drill_depth_indent],
 		//Top Small Hole
-		[cn_lego_drill_small/2,in_height-cn_lego_drill_depth_indent-cn_lego_drill_sharpness],
+		[cn_lego_drill_small,in_height-cn_lego_drill_depth_indent-cn_lego_drill_sharpness],
 		//Bottom Small hole
-		[cn_lego_drill_small/2,cn_lego_drill_depth_indent+cn_lego_drill_sharpness],
+		[cn_lego_drill_small,cn_lego_drill_depth_indent+cn_lego_drill_sharpness],
 		//Bottom Big Hole
-		[cn_lego_drill_large/2,cn_lego_drill_depth_indent],
-		[cn_lego_drill_large/2,0]
+		[cn_lego_drill_large,cn_lego_drill_depth_indent],
+		[cn_lego_drill_large,0]
 	];
 	//Rotate the cross section of the hole around its axis, to generate the hole
 	rotate_extrude($fa = 0.1+in_precision, $fs = 0.1+in_precision/2)

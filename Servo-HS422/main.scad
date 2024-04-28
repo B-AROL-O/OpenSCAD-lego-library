@@ -4,7 +4,7 @@ include <HS422.scad>
 //Lego beam library
 include <customizable_straight_beam_v4o.scad>
 
-x_show_servo = false;
+x_show_servo = true;
 
 Lx_margin_servo_butt = 0.5;
 
@@ -23,7 +23,7 @@ Ly_width_cover = 3*cn_lego_pitch_stud +(cn_lego_pitch_stud-cn_lego_width_beam)*2
 //the servo rests on Z=0 this margin extends below
 Lz_margin = 0;
 
-Lz_thickness_cover = 0.0;
+Lz_thickness_cover = 1.3;
 
 Lz_adapter_depth = (Nz_stud) *cn_lego_pitch_stud;
 
@@ -38,10 +38,8 @@ Lyz_game_cable = 0.0;
 //Enlarge the hole
 Ld_drill_margin = 0.2;
 
-//translate([-0,-20,0])
-//rotate([0,0,90])
-//lego_beam("oO+P+Oo");
-//0*Ly_hole_interaxis/2+0*cn_lego_height_beam/2+0*4
+//Drill into the lateral beams
+Lx_flange_drill = 10.0;
 
 module HS422_lego()
 {
@@ -50,13 +48,13 @@ module HS422_lego()
 	{
 		union()
 		{
-			//Make the bottom cover
-			//ranslate([-Lx_margin_servo_butt,0,-Lz_margin])
-				//base_box(21.0,Ly_width_cover,Lz_thickness_cover );
+			//Bottom Cover
+			translate([-Lx_margin_servo_butt, -3.6*cn_lego_pitch_stud,0])
+			linear_extrude(Lz_thickness_cover)
+			square( [Lx_base_to_flange, Ly_butt+cn_lego_pitch_stud/4] );
 
-			//Make the top bottom cover
-			//translate([-Lx_margin_servo_butt,0, 2*cn_lego_pitch_stud -Lz_margin -Lz_thickness_cover])
-				//base_box(21.0,Ly_width_cover,Lz_thickness_cover );
+			//Top Cover
+			//It's just a back ledge to keep the butt down?
 
 			//Butt LEGO plate
 			translate([-Lx_margin_servo_butt-0.5*cn_lego_width_beam, 2*cn_lego_pitch_stud,0])
@@ -91,13 +89,22 @@ module HS422_lego()
 			([
 				"+++",
 				"POP",
-				"OPO",
 				"+++",
+				"OPO",
 				"   ",
 			]);
 
 			
-		} //End union
+		} //End addition
+
+		union()
+		{
+			translate([Lx_margin_servo_butt+Lx_case,-Ly_flange+18,0.5*Nz_stud*cn_lego_height_beam-0.5*Lz_depth])
+			rotate([0,-90,0])
+			linear_extrude(Lx_flange_drill)
+			square( [Lz_depth, Ly_flange+2] );
+
+		} //End sutraction
 
 		//Drill the servo connector hole
 		//translate([Lx_flange_base-Lyz_game_flange/2,0,-Lyz_game_flange/2])
@@ -121,7 +128,7 @@ module HS422_lego()
 
 if (x_show_servo == true)
 {
-	hs422();
+	HS422();
 }
-
+ 
 HS422_lego();
