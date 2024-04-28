@@ -4,8 +4,9 @@ include <customizable_straight_beam_v4o.scad>
 
 lego_plate_alternate
 ([
- "+",
- "+",
+	"+",
+	"O",
+	"+",
 ]);
 
 if (false)
