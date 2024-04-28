@@ -28,27 +28,27 @@ cn_lego_pitch_stud = 8.0;
 cn_lego_drill_small = 4.9/2;
 cn_lego_drill_large = 6.1/2;
 cn_lego_height_beam = 7.8;
+
+cn_lego_width_beam = 7.3; 
+cn_lego_drill_axel = 2.0;
+
 //How deep the shriking of the big hole
 cn_lego_drill_depth_indent = 0.85;
 //How steep the transition from big hole to small hole
 cn_lego_drill_sharpness = 0.5;
-cn_lego_width_beam = 7.3; 
-cn_lego_drill_axel = 2.0;
 
-n_lego_resolution = 100;
-
-module body( in_length_stud, in_height = cn_lego_height_beam )
+module body( in_length_stud, in_height = cn_lego_height_beam, in_precision = 0.5 )
 {
     translate([0, cn_lego_width_beam/2, 0]) 
     hull()
 	{
-        cylinder(r=cn_lego_width_beam/2, h=in_height,$fn=n_lego_resolution);    
+        cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);    
         translate([(in_length_stud-1)*cn_lego_pitch_stud, 0, 0]) 
-            cylinder(r=cn_lego_width_beam/2, h=in_height, $fn=n_lego_resolution);
+            cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);
     }
 }
 
-module hole( in_height = cn_lego_height_beam, in_precision = 1 )
+module hole( in_height = cn_lego_height_beam, in_precision = 0.5 )
 {
 	an_cross_section = [
 		//Bottom
