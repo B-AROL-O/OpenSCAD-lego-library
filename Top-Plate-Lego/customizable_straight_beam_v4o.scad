@@ -93,18 +93,18 @@ module lego_beam( is_holes, in_height = cn_lego_height_beam  )
 			for (i = [1:in_length])
 			{
 				if (is_holes[i-1] == "+")
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2, 0])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2, 0])
 						plus( in_height );
 				else if (is_holes[i-1] == "o")
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2, 0])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2, 0])
 						hole( in_height );
 				else if (is_holes[i-1] == "O")
 					rotate([90,0,0])
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
 						hole( in_height );
 				else if (is_holes[i-1] == "P")
 					rotate([90,0,0])
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
 						plus( in_height );
 				else 
 				{
@@ -150,4 +150,4 @@ module lego_plate_alternate(ias_pattern)
     }
 }
 
-//lego_plate_alternate(["ooo", "+++", "POP", "ooo"]);
+lego_plate_alternate(["ooo", "+++", "POP", "ooo"]);
