@@ -28,41 +28,47 @@ cn_lego_pitch_stud = 8.0;
 cn_lego_drill_small = 4.9/2;
 cn_lego_drill_large = 6.1/2;
 cn_lego_height_beam = 7.8;
-cn_lego_drill_depth_indent = 0.85;
+
 cn_lego_width_beam = 7.3; 
 cn_lego_drill_axel = 2.0;
 
-n_lego_resolution = 100;
+//How deep the shriking of the big hole
+cn_lego_drill_depth_indent = 0.85;
+//How steep the transition from big hole to small hole
+cn_lego_drill_sharpness = 0.5;
 
-module body( in_length_stud, in_height = cn_lego_height_beam )
+module body( in_length_stud, in_height = cn_lego_height_beam, in_precision = 0.5 )
 {
     translate([0, cn_lego_width_beam/2, 0]) 
     hull()
 	{
-        cylinder(r=cn_lego_width_beam/2, h=in_height,$fn=n_lego_resolution);    
+        cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);    
         translate([(in_length_stud-1)*cn_lego_pitch_stud, 0, 0]) 
-            cylinder(r=cn_lego_width_beam/2, h=in_height, $fn=n_lego_resolution);
+            cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);
     }
 }
 
-module hole( in_height = cn_lego_height_beam )
+module hole( in_height = cn_lego_height_beam, in_precision = 0.5 )
 {
-    union()
-	{
-        //core
-        cylinder(r=cn_lego_drill_small,h=in_height,$fn=n_lego_resolution);
-        
-        //top countersink
-        translate([0,0,cn_lego_height_beam-cn_lego_drill_depth_indent]) 
-            cylinder(r=cn_lego_drill_large,h=cn_lego_drill_depth_indent,$fn=n_lego_resolution);
-        
-        //bottom countersink
-        translate([0,0,0]) 
-            cylinder(r=cn_lego_drill_large,h=cn_lego_drill_depth_indent,$fn=n_lego_resolution);
-        
-        translate([0,0,cn_lego_drill_depth_indent])
-            cylinder(h=(cn_lego_drill_large - cn_lego_drill_small), r1=cn_lego_drill_large, r2=cn_lego_drill_small,$fn=n_lego_resolution);
-    }
+	an_cross_section = [
+		//Bottom
+		[0,0],
+		//Top
+		[0,in_height],
+		//Top Big hole
+		[cn_lego_drill_large/2,in_height],
+		[cn_lego_drill_large/2,in_height-cn_lego_drill_depth_indent],
+		//Top Small Hole
+		[cn_lego_drill_small/2,in_height-cn_lego_drill_depth_indent-cn_lego_drill_sharpness],
+		//Bottom Small hole
+		[cn_lego_drill_small/2,cn_lego_drill_depth_indent+cn_lego_drill_sharpness],
+		//Bottom Big Hole
+		[cn_lego_drill_large/2,cn_lego_drill_depth_indent],
+		[cn_lego_drill_large/2,0]
+	];
+	//Rotate the cross section of the hole around its axis, to generate the hole
+	rotate_extrude($fa = 0.1+in_precision, $fs = 0.1+in_precision/2)
+	polygon(an_cross_section);
 }
 
 module plus( in_height = cn_lego_height_beam )
@@ -93,18 +99,18 @@ module lego_beam( is_holes, in_height = cn_lego_height_beam  )
 			for (i = [1:in_length])
 			{
 				if (is_holes[i-1] == "+")
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2, 0])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2, 0])
 						plus( in_height );
 				else if (is_holes[i-1] == "o")
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2, 0])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2, 0])
 						hole( in_height );
 				else if (is_holes[i-1] == "O")
 					rotate([90,0,0])
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
 						hole( in_height );
 				else if (is_holes[i-1] == "P")
 					rotate([90,0,0])
-					translate([(i-1)*cn_lego_pitch_stud, cn_lego_width_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
+					translate([(i-1)*cn_lego_pitch_stud, cn_lego_height_beam/2,-cn_lego_pitch_stud+cn_lego_drill_depth_indent/2])
 						plus( in_height );
 				else 
 				{
