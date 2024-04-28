@@ -156,4 +156,4 @@ module lego_plate_alternate(ias_pattern)
     }
 }
 
-lego_plate_alternate(["ooo", "+++", "POP", "ooo"]);
+//lego_plate_alternate(["ooo", "+++", "POP", "ooo"]);
