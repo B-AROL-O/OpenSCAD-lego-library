@@ -76,8 +76,8 @@ module HS422_lego()
 			lego_plate_alternate
 			([
 				"+++",
-				"POP",
-				"OPO",
+				"   ",
+				"O O",
 				"+++",
 				"   ",
 			]);
@@ -99,10 +99,17 @@ module HS422_lego()
 
 		union()
 		{
-			translate([Lx_margin_servo_butt+Lx_case,-Ly_flange+18,0.5*Nz_stud*cn_lego_height_beam-0.5*Lz_depth])
+			//Extrude flange socket
+			translate([Lx_margin_servo_butt+Lx_case,-Ly_flange+18,0.5*Nz_stud*cn_lego_height_beam-0.51*Lz_depth])
 			rotate([0,-90,0])
 			linear_extrude(Lx_flange_drill)
-			square( [Lz_depth, Ly_flange+2] );
+			square( [Lz_depth+1, Ly_flange+2] );
+
+			//Drill wire hole
+			translate([6,12.3,3*0.5*cn_lego_height_beam])
+			rotate([90,0,180])
+			linear_extrude(50)
+			circle( d=Lz_width_cable*1.5 );
 
 		} //End sutraction
 
