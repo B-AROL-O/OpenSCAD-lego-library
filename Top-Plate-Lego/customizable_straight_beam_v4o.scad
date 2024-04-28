@@ -155,11 +155,5 @@ module lego_plate_alternate(ias_pattern)
             lego_beam(ac_array, cn_lego_pitch_stud);
     }
 }
-lego_plate_alternate
-([
-	"o",
-	"O",
-	"o",
-]);
 
 //lego_plate_alternate(["ooo", "+++", "POP", "ooo"]);

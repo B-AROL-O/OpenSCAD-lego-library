@@ -73,7 +73,7 @@ module HS422_lego()
 			]);
 
 			//Left LEGO plate
-			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_height_beam, 2.0*cn_lego_pitch_stud,-Lz_margin])
+			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_width_beam, 2.0*cn_lego_pitch_stud,-Lz_margin])
 			rotate([90,0,0])
 			lego_plate_alternate
 			([
@@ -84,7 +84,7 @@ module HS422_lego()
 			]);
 
 			//RIGHT LEGO plate
-			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_height_beam, -(Ny_stud-3)*cn_lego_pitch_stud,-Lz_margin])
+			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_width_beam, -(Ny_stud-3)*cn_lego_pitch_stud,-Lz_margin])
 			rotate([90,0,0])
 			lego_plate_alternate
 			([
