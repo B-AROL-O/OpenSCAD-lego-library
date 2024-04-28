@@ -1,5 +1,3 @@
-include <custom_lib.scad>
-
 //Use polygon and linear extrude
 //The origin is placed at the root of the axel in XY
 
@@ -8,14 +6,18 @@ include <custom_lib.scad>
 //X axis
 //Total height of case from base to top of gearbox
 Lx_case = 35.5;
+//Measure from base to top of bearing of axel
+Lx_case_to_bearing = 37.5;
 //Add total height with axel
-Lx_case_and_axel = 27.3;
+Lx_case_and_axel = 41.3;
 //Height of the flanges
-Lx_flange_thickness = 1.6;
-//Position of the flanges
-//8.8 from case
-//18.8 from base
-Lx_flange_base = (18.8 -Lx_flange_thickness)/2 + (Lx_case -8.8)/2;
+Lx_flange_thickness = 2.4;
+
+//Measure position of the flanges from bottom and top
+Lx_base_to_flange = 29.5;
+Lx_flange_to_top = 9.4;
+
+
 //Length of the cable stub tot attach to the model
 Lx_length_cable = 10.0;
 
@@ -25,14 +27,19 @@ Lx_length_cable = 10.0;
 
 //Y axis
 Ly_butt = 40.2;
-Ly_hole_interaxis = 28.0;
+//Distance between holes measured from the inside, need to add diameter
+Ly_hole_interaxis_inner = 44.3;
 Ly_flange = 54.3;
 Ly_height_cable = 3.0;
 //How much a flange extends from the body
 Ly_flange_extends = (Ly_flange-Ly_butt)/2;
+//Axel offset from top of servo
+Ly_top_to_axel = 10.5;
 
 //Z axis
 Lz_depth = 20.0;
+//I have four holes in a 2X2 configuration, this is vertical stacking
+Lz_hole_interaxis = 10.0;
 
 Lz_width_cable = 8.0;
 
@@ -42,43 +49,17 @@ Lr_indent = 8.0;
 //Lz_depth_gearbox = 4.3;
 //Diameters
 //Holes in the flange
-D_hole_diameter = 2.1;
+D_hole_diameter = 4.1;
 //Servo Axel
-D_axel = 3.9;
+D_axel = 5.9;
+//Diameter of the bearing at the base of the axel
+D_bearing = 12.6;
+
+//Position of the flange from the base
+Lx_flange_base = (Lx_base_to_flange -Lx_flange_thickness)/2 + (Lx_case -Lx_flange_to_top)/2;
 
 
-//Lx_gearbox_thickness = Lx_body_flange_gearbox -Lx_flange_thickness -Lx_butt;
-//ly_flange_length = (Ly_flange-Ly_butt)/2;
-
-module HS422_OLD()
-{
-	color("black")
-	difference()
-	{
-		union()
-		{
-			//case. the top has a more complex shape, I use just a box
-			base_box(Lx_case, Ly_butt, Lz_depth);
-			//add the flange
-			translate([Lx_flange_base,0,0])
-				base_box(Lx_flange_thickness, Ly_flange, Lz_depth);
-			//add the axel
-			translate([Lx_case,Lz_depth/2,Lz_depth/2])
-				base_cylinder( D_axel, Lx_case_and_axel-Lx_case );
-			//Add the cable leaving from the back
-			translate([-Lx_length_cable,Ly_butt/2-Ly_height_cable/2,Lz_depth/2-Lz_width_cable/2])
-				base_box(Lx_length_cable, Ly_height_cable, Lz_width_cable);
-		}
-		union()
-		{
-			translate([Lx_flange_base, Ly_hole_interaxis/2, Lz_depth/2])
-				base_cylinder( D_hole_diameter, Lx_flange_thickness );
-			translate([Lx_flange_base, -Ly_hole_interaxis/2, Lz_depth/2])
-				base_cylinder( D_hole_diameter, Lx_flange_thickness );
-		}
-	}
-}
-
+Ly_hole_interaxis = Ly_hole_interaxis_inner +D_hole_diameter; 
 
 module HS422()
 {
@@ -105,7 +86,8 @@ module HS422()
 		//Bottom left corner
 		[0, -Ly_butt],
     ];
-	//Build the geometry
+	//Build the geometry, translate it so the axel is in the origin
+	translate([-Lx_case,Ly_top_to_axel,-Lz_depth/2])
 	color("gray")
 	difference()
 	{
@@ -116,14 +98,46 @@ module HS422()
 		}
 		union()
 		{
-			translate([Lx_flange_base, Ly_hole_interaxis/2, Lz_depth/2])
-				base_cylinder( D_hole_diameter, Lx_flange_thickness );
-			translate([Lx_flange_base, -Ly_hole_interaxis/2, Lz_depth/2])
-				base_cylinder( D_hole_diameter, Lx_flange_thickness );
+			//Top Top hole
+			translate([Lx_flange_base,(Ly_hole_interaxis-Ly_butt)/2,Lz_depth/2+Lz_hole_interaxis/2])
+			rotate([0,90,0])
+			linear_extrude(Lx_flange_thickness)
+			circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
+			//Top Bottom hole
+			translate([Lx_flange_base,(Ly_hole_interaxis-Ly_butt)/2,Lz_depth/2-Lz_hole_interaxis/2])
+			rotate([0,90,0])
+			linear_extrude(Lx_flange_thickness)
+			circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
+
+			//Bottom Top Hole
+			translate([Lx_flange_base,-Ly_hole_interaxis+(Ly_hole_interaxis-Ly_butt)/2,Lz_depth/2+Lz_hole_interaxis/2])
+			rotate([0,90,0])
+			linear_extrude(Lx_flange_thickness)
+			circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
+			//Bottom Bottom Hole
+			translate([Lx_flange_base,-Ly_hole_interaxis+(Ly_hole_interaxis-Ly_butt)/2,Lz_depth/2-Lz_hole_interaxis/2])
+			rotate([0,90,0])
+			linear_extrude(Lx_flange_thickness)
+			circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
+
 		}
 	}
+	//add servo bearing at base of axel
+
+	//Add servo axel in the origin
+	color("red")
+	rotate([0,90,0])
+	linear_extrude(Lx_case_to_bearing-Lx_case)
+	circle(d=D_bearing,$fa=0.5,$fs=0.5);
+
+
+	//Add servo axel in the origin
+	color("red")
+	rotate([0,90,0])
+	linear_extrude(Lx_case_and_axel-Lx_case)
+	circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
 }
 
 
 //Show the model
-HS422();
+//HS422();
