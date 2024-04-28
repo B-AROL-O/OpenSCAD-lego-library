@@ -10,7 +10,7 @@ Lx_margin_servo_butt = 0.0;
 
 //Number of stud fixtures
 Nx_stud = 4;
-Ny_stud = 8;
+Ny_stud = 7;
 Nz_stud = 3;
 
 //Size of a 5 stud lego beam
@@ -25,7 +25,7 @@ Lz_margin = 0;
 
 Lz_thickness_cover = 0.0;
 
-Lz_adapter_depth = (Nz_stud) *cn_lego_height_beam;
+Lz_adapter_depth = (Nz_stud) *cn_lego_pitch_stud;
 
 //Game Margin added to the flange extrusion on Z axis
 Lyz_game_flange = 0;
@@ -45,7 +45,7 @@ Ld_drill_margin = 0.2;
 
 module HS422_lego()
 {
-	translate([0,0,-Lz_adapter_depth/2])
+	translate([-Lx_case,-Ly_top_to_axel*0,-Lz_adapter_depth/2])
 	difference()
 	{
 		union()
@@ -67,14 +67,13 @@ module HS422_lego()
 				"POP",
 				"+++",
 				"OPO",
-				"OPO",
 				"+++",
 				"POP",
 				"+++",
 			]);
 
 			//Left LEGO plate
-			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_width_beam, 2.0*cn_lego_pitch_stud,-Lz_margin])
+			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_height_beam, 2.0*cn_lego_pitch_stud,-Lz_margin])
 			rotate([90,0,0])
 			lego_plate_alternate
 			([
@@ -85,7 +84,7 @@ module HS422_lego()
 			]);
 
 			//RIGHT LEGO plate
-			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_width_beam, -(Ny_stud-3)*cn_lego_pitch_stud,-Lz_margin])
+			translate([-1.0*Lx_margin_servo_butt-0.5*cn_lego_height_beam, -(Ny_stud-3)*cn_lego_pitch_stud,-Lz_margin])
 			rotate([90,0,0])
 			lego_plate_alternate
 			([
