@@ -6,7 +6,7 @@ include <customizable_straight_beam_v4o.scad>
 
 x_show_servo = false;
 
-Lx_margin_servo_butt = 0.0;
+Lx_margin_servo_butt = 0.5;
 
 //Number of stud fixtures
 Nx_stud = 4;
@@ -45,7 +45,7 @@ Ld_drill_margin = 0.2;
 
 module HS422_lego()
 {
-	translate([-Lx_case,-Ly_top_to_axel*0,-Lz_adapter_depth/2])
+	translate([-Lx_case,cn_lego_pitch_stud-Ly_top_to_axel*1+1,-Lz_adapter_depth/2])
 	difference()
 	{
 		union()
@@ -81,6 +81,7 @@ module HS422_lego()
 				"POP",
 				"OPO",
 				"+++",
+				"   ",
 			]);
 
 			//RIGHT LEGO plate
@@ -92,6 +93,7 @@ module HS422_lego()
 				"POP",
 				"OPO",
 				"+++",
+				"   ",
 			]);
 
 			
