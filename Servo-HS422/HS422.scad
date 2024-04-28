@@ -18,8 +18,8 @@ Lx_base_to_flange = 29.5;
 Lx_flange_to_top = 9.4;
 
 
-//Length of the cable stub tot attach to the model
-Lx_length_cable = 10.0;
+//Length of the cable stub to attach to the model
+Lx_length_cable = 25.0;
 
 //Lx_butt = (16.4+0.0);
 //Lx_body_flange_gearbox = 23.0;
@@ -93,8 +93,15 @@ module HS422()
 	{
 		union()
 		{
+			//Body of the servo
 			linear_extrude(Lz_depth)
 				polygon(aan_points);
+			//Cable stub
+			translate([6,0,Lz_depth/2])
+			rotate([90,0,180])
+				linear_extrude(Lx_length_cable)
+				square([Ly_height_cable, Lz_width_cable],center=true);
+
 		}
 		union()
 		{
@@ -130,14 +137,12 @@ module HS422()
 	linear_extrude(Lx_case_to_bearing-Lx_case)
 	circle(d=D_bearing,$fa=0.5,$fs=0.5);
 
-
 	//Add servo axel in the origin
 	color("red")
 	rotate([0,90,0])
 	linear_extrude(Lx_case_and_axel-Lx_case)
 	circle(d=D_hole_diameter,$fa=0.5,$fs=0.5);
 }
-
 
 //Show the model
 //HS422();
