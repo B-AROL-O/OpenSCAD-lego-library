@@ -1,0 +1,1 @@
+it's a 1/4 inches screw to connect a LEGO plate to a standard camera mount
