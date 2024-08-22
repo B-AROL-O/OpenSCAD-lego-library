@@ -17,11 +17,25 @@
 include <suspended_hole.scad>
 
 //Core parameters of various servo splines
+
+//C24T
+//Servo compatible with this spline:
+//HS311, HS422
 caan_hitec_c24t =
 [
 	[5.6, 3.5, 8.0, 2.8],
 	[24, 0.4, 0.7, 0.051]
 ];
+
+//H25T
+//Compatible Servos:
+//Turnigy
+caan_hitec_h25t =
+[
+	[5.92, 3.7, 8.0, 2.8],
+	[25, 0.3, 0.7, 0.1]
+];
+
 
 module servo_head_tooth(l_tooth, w_tooth, h_tooth, h_head)
 {
@@ -66,9 +80,7 @@ module servo_head_parametric(iaan_param, ih_drill, ig_head = 0.2)
 		servo_head_tooth(l_tooth, w_tooth, h_tooth, h_head);	
 	}
 
-	h_drill_head = 2;
-
-	
+	h_drill_head = 1.5;
 
 	//Create a pillar, that is the positive of the screw drill hole
 	if (ih_drill > h_head+h_drill_head)
@@ -96,6 +108,10 @@ module servo_head(is_spline, ih_drill, ig_head = 0.2)
     {
         servo_head_parametric(caan_hitec_c24t, ih_drill, ig_head = ig_head);
     }
+	else if (is_spline == "H25T")
+    {
+        servo_head_parametric(caan_hitec_h25t, ih_drill, ig_head = ig_head);
+    }
     else
     {
         echo("Spline type not recognized");
@@ -103,3 +119,4 @@ module servo_head(is_spline, ih_drill, ig_head = 0.2)
 }
 
 //servo_head( "C24T", 10 );
+//servo_head( "H25T", 10 );

@@ -19,7 +19,11 @@ include <HS422.scad>
 //Lego beam library
 include <customizable_straight_beam_v4o.scad>
 
-x_show_servo = false;
+x_show_servo = true;
+
+//Realign the servo shaft to the LEGO latice
+gx_shift_center_shaft = 1.5;
+
 
 Lx_margin_servo_butt = 0.5;
 
@@ -63,6 +67,8 @@ Lx_m4_depth = 7;
 //Thickness of the wall facing the servo, supports the bridge
 Ly_nut_wall_thickness = 0.4;
 
+
+
 module HS422_lego( in_precision = 0.5 )
 {
 	translate([-Lx_case,cn_lego_pitch_stud-Ly_top_to_axel*1+1,-Lz_adapter_depth/2])
@@ -90,10 +96,10 @@ module HS422_lego( in_precision = 0.5 )
 				[
 					"+++",
 					"POP",
-					"+++",
+					"+P+",
 					"OPO",
 					"OPO",
-					"+++",
+					"+O+",
 					"POP",
 					"+++",
 				],
@@ -129,67 +135,66 @@ module HS422_lego( in_precision = 0.5 )
 
 		union()
 		{
+			/*
 			//Extrude flange socket
 			translate([Lx_margin_servo_butt+Lx_case,-Ly_flange+18,0.5*Nz_stud*cn_lego_height_beam-0.51*Lz_depth])
 			rotate([0,-90,0])
 			linear_extrude(Lx_flange_drill)
 			square( [Lz_depth+1, Ly_flange+2] );
-
-
+			*/
+			/*
 			//Wire passage
 			translate([Lx_flange_base,16,7+5])
 			rotate([0,90,180])
 			linear_extrude(20)
 			square( [5,cn_lego_width_beam], center=true );
+			*/
 			//Drill wire hole
 			translate([6,12.3,3*0.5*cn_lego_height_beam])
 			rotate([90,0,180])
 			linear_extrude(50)
 			circle( d=Lz_width_cable*1.1,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
-
-			//Drill the M4 holes to attach the servo
-			translate([Lx_flange_base,16,7])
-			rotate([0,90,180])
-			linear_extrude(Lx_drill_depth)
-			circle( d=Ld_drill,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
-			//Extrude M4 HEX NUT SLOT
-			translate([Lx_flange_base-Lx_m4_depth,16.0+Ly_nut_wall_thickness,7])
-			rotate([0,90,180])
-			linear_extrude(Lx_m4_height)
-			square( [Lz_m4_width,cn_lego_width_beam], center=true );
 			
-			//Drill M4 hole
-			translate([Lx_flange_base,16,7+Lz_hole_interaxis])
+			//Drill the M4 holes to attach the servo
+			translate
+			([
+				Lx_flange_base+gx_shift_center_shaft,
+				16-gx_shift_center_shaft,
+				7
+			])
 			rotate([0,90,180])
 			linear_extrude(Lx_drill_depth)
 			circle( d=Ld_drill,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
-			//Extrude M4 HEX NUT SLOT
-			translate([Lx_flange_base-Lx_m4_depth,16+Ly_nut_wall_thickness,7+Lz_hole_interaxis])
-			rotate([0,90,180])
-			linear_extrude(Lx_m4_height)
-			square( [Lz_m4_width,cn_lego_width_beam], center=true );
-
 			//Drill M4 hole
-			translate([Lx_flange_base,16-Ly_hole_interaxis,7])
+			translate
+			([
+				Lx_flange_base,
+				16-gx_shift_center_shaft,
+				7+Lz_hole_interaxis
+			])
 			rotate([0,90,180])
 			linear_extrude(Lx_drill_depth)
 			circle( d=Ld_drill,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
-			//Extrude M4 HEX NUT SLOT (magic number to make math works, I didn't do the proper geometry, sorry future me)
-			translate([Lx_flange_base-Lx_m4_depth,16.4-Ly_hole_interaxis-Ly_nut_wall_thickness,7])
-			rotate([0,90,180])
-			linear_extrude(Lx_m4_height)
-			square( [Lz_m4_width,cn_lego_width_beam], center=true );
-
 			//Drill M4 hole
-			translate([Lx_flange_base,16-Ly_hole_interaxis,7+Lz_hole_interaxis])
+			translate
+			([
+				Lx_flange_base,
+				16-Ly_hole_interaxis-gx_shift_center_shaft,
+				7
+			])
 			rotate([0,90,180])
 			linear_extrude(Lx_drill_depth)
 			circle( d=Ld_drill,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
-			//Extrude M4 HEX NUT SLOT
-			translate([Lx_flange_base-Lx_m4_depth,16.4-Ly_hole_interaxis-Ly_nut_wall_thickness,7+Lz_hole_interaxis])
+			//Drill M4 hole
+			translate
+			([
+				Lx_flange_base,
+				16-Ly_hole_interaxis-gx_shift_center_shaft,
+				7+Lz_hole_interaxis
+			])
 			rotate([0,90,180])
-			linear_extrude(Lx_m4_height)
-			square( [Lz_m4_width,cn_lego_width_beam], center=true );
+			linear_extrude(Lx_drill_depth)
+			circle( d=Ld_drill,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2 );
 
 		} //End sutraction
 
@@ -199,7 +204,9 @@ module HS422_lego( in_precision = 0.5 )
 
 if (x_show_servo == true)
 {
+	rotate([0,-90,0])
 	HS422();
 }
+translate([0,gx_shift_center_shaft,0])
 rotate([0,-90,0])
 HS422_lego();
