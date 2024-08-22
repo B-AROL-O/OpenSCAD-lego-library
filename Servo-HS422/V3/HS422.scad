@@ -100,7 +100,7 @@ module HS422()
 		[0, -gl_hs422_base],
     ];
 	//Build the geometry, translate it so the axel is in the origin
-	translate([-gh_hs422_total,gh_hs422_axel,-gw_hs422/2])
+	translate([-gh_hs422_total,gw_hs422_axel,-gw_hs422/2])
 	color("gray")
 	difference()
 	{
@@ -226,7 +226,7 @@ module hs422_cable_rail( im_seat, ih_rail, il_rail_top_to_cable, ir_smoothing = 
 //ih_screw = length of the screw
 //il_hole_cable = length of the cable hole extrusion
 //im_seat = margin in millimeters to add to the HS422 model to make a seat
-module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut = 8, ih_hex_nut = 5, il_hole_cable = 30, iwi_rail_offset = 2, im_seat = 1, in_precision = 0.2 )
+module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut = 8, ih_hex_nut = 5, il_hole_cable = 30, iwi_rail_offset = 2, im_seat = 0.5, in_precision = 0.2 )
 {
     //Create the outline of the seat of the HS422
     //I enlarge the length and witdth dimensions by a given amount
@@ -261,7 +261,7 @@ module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut
         //Top Top Hole
         translate
         ([
-            gh_hs422_base_to_flange_bot-gm_hs422_hole/2,
+            gh_hs422_base_to_flange_bot,
             (gli_hs422_hole-gl_hs422_base)/2,
             gw_hs422/2+gwi_hs422_hole/2
         ])
@@ -272,7 +272,7 @@ module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut
         //Hex nut slot on the tip of the hole
         translate
         ([
-            gh_hs422_base_to_flange_bot-gm_hs422_hole/2-ih_screw,
+            gh_hs422_base_to_flange_bot-ih_screw,
             (gli_hs422_hole-gl_hs422_base)/2,
             gw_hs422/2+gwi_hs422_hole/2
         ])
@@ -284,7 +284,7 @@ module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut
         //Bottom Bottom Hole
         translate
         ([
-            gh_hs422_base_to_flange_bot-gm_hs422_hole/2,
+            gh_hs422_base_to_flange_bot,
             -gli_hs422_hole+(gli_hs422_hole-gl_hs422_base)/2,
             gw_hs422/2-gwi_hs422_hole/2
         ])
@@ -294,7 +294,7 @@ module hs422_seat( ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut
         //Hex nut slot on the tip of the hole
         translate
         ([
-            gh_hs422_base_to_flange_bot-gm_hs422_hole/2-ih_screw,
+            gh_hs422_base_to_flange_bot-ih_screw,
             -gli_hs422_hole+(gli_hs422_hole-gl_hs422_base)/2,
             gw_hs422/2-gwi_hs422_hole/2
         ])
@@ -327,9 +327,19 @@ module HS422_vertical()
 	HS422();
 }
 
+module hs422_seat_vertical(ih_cable_rail = 10, id_screw = 3.3, ih_screw = 50, id_hex_nut = 8, ih_hex_nut = 5, il_hole_cable = 30, iwi_rail_offset = 2, im_seat = 0.5, in_precision = 0.2)
+{
+	translate([0,0,gh_hs422_total])
+	rotate([0,-90,0])
+	hs422_seat(ih_cable_rail, id_screw, ih_screw, id_hex_nut, ih_hex_nut, il_hole_cable, iwi_rail_offset, im_seat, in_precision);
+}
+
+
 //Show the model
 //HS422();
 
 //HS422_vertical();
 
-hs422_seat();
+//hs422_seat();
+
+//hs422_seat_vertical();

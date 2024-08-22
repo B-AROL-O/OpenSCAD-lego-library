@@ -4,9 +4,9 @@ include <HS422.scad>
 //Lego beam library
 include <customizable_straight_beam_v4o.scad>
 
-x_show_servo = true;
+x_show_servo = false;
 //Realign the servo shaft to the LEGO latice
-gx_shift_center_shaft = 0;
+gx_shift_center_shaft = 10;
 
 //Number of stud fixtures
 Nx_stud = 7;
@@ -40,14 +40,14 @@ module HS422_lego_holder()
 			lego_plate_alternate
 			(
 				[
-					"+++",
-					"POP",
-					"+P+",
-					"OPO",
-					"OPO",
-					"+O+",
-					"POP",
-					"+++",
+					"  o",
+					"oOo",
+					"OOO",
+					"oOo",
+					"OOO",
+					"oOo",
+					"O  ",
+					"o o",
 				],
 				in_margin = 0.0
 			);
@@ -61,9 +61,9 @@ module HS422_lego_holder()
 			rotate([-90,-90,0])
 			lego_plate_alternate
 			([
-				"+++",
-				"P P",
-				"+ +",
+				"o o",
+				"   ",
+				"   ",
 				"   ",
 				"   ",
 			]);
@@ -78,11 +78,11 @@ module HS422_lego_holder()
 			rotate([-90,-90,0])
 			lego_plate_alternate
 			([
-				"+++",
-				"POP",
-				"+O+",
-				"   ",
-				"   ",
+				"o o",
+				"OOO",
+				"oOo",
+				"OOO",
+				"o o",
 			]);
 
 			//Fill space
@@ -96,22 +96,13 @@ module HS422_lego_holder()
 			(
 				cn_lego_pitch_stud*3,
 				cn_lego_pitch_stud*6+0.7,
-				Lx_flange_base
+				30
 			);
 		}
 		union()
 		{
-			//Extrude space for the servo butt
-
 			//Extrude space for the servo flange
-
-			
-			translate([-50,-50,20])
-			linear_extrude(10)
-			square([100, Ly_flange]);
-
-
-			//Extrude side hole for the cable
+			hs422_seat_vertical(ih_screw=31);
 
 		}
 	}
