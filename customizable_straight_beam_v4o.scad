@@ -100,7 +100,7 @@ module lego_beam( is_holes, in_height = cn_lego_height_beam, in_margin = 0.0  )
 	if (in_length > 0)
 	{
 		//Center the beam
-		translate([0,cn_lego_pitch_stud,0])
+		translate([0,in_height,0])
 		rotate([90,0,0])
 		difference()
 		{
