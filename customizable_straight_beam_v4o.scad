@@ -21,7 +21,8 @@
 		2024-08-04 there is an asymmetry in the hole, the oPo shows there should be a thin bodred above the hole
 */
 
-
+$fa = $preview ? 2:.5;
+$fs = $preview ? .5:0.35;
 
 // user parameters
 
@@ -46,18 +47,18 @@ cn_lego_drill_depth_indent = 0.5;
 //How steep the transition from big hole to small hole
 cn_lego_drill_sharpness = 0.5;
 
-module body( in_length_stud, in_height = cn_lego_height_beam, in_precision = 0.5 )
+module body( in_length_stud, in_height = cn_lego_height_beam)
 {
     translate([0, cn_lego_width_beam/2, 0]) 
     hull()
 	{
-        cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);    
+        cylinder(r=cn_lego_width_beam/2, h=in_height);
         translate([(in_length_stud-1)*cn_lego_pitch_stud, 0, 0]) 
-            cylinder(r=cn_lego_width_beam/2, h=in_height,$fa = 0.1+in_precision, $fs = 0.1+in_precision/2);
+            cylinder(r=cn_lego_width_beam/2, h=in_height);
     }
 }
 
-module hole( in_height = cn_lego_height_beam, in_precision = 0.5, in_margin = 0.0 )
+module hole( in_height = cn_lego_height_beam, in_margin = 0.0)
 {
 	an_cross_section = [
 		//Bottom
@@ -76,11 +77,11 @@ module hole( in_height = cn_lego_height_beam, in_precision = 0.5, in_margin = 0.
 		[(cn_lego_drill_large+in_margin)/2,0]
 	];
 	//Rotate the cross section of the hole around its axis, to generate the hole
-	rotate_extrude($fa = 0.1+in_precision, $fs = 0.1+in_precision/2)
-	polygon(an_cross_section);
+	rotate_extrude()
+		polygon(an_cross_section);
 }
 
-module plus( in_height = cn_lego_height_beam, in_margin = 0.0 )
+module plus( in_height = cn_lego_height_beam, in_margin = 0.0)
 {
     union()
 	{
@@ -92,7 +93,7 @@ module plus( in_height = cn_lego_height_beam, in_margin = 0.0 )
     }
 }
 
-module lego_beam( is_holes, in_height = cn_lego_height_beam, in_margin = 0.0  )
+module lego_beam( is_holes, in_height = cn_lego_height_beam, in_margin = 0.0)
 {
 	//number of studs
 	in_length = len(is_holes);
